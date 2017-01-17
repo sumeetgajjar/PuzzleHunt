@@ -40,16 +40,28 @@ if (checkParam('name') && checkParam('phone-number')) {
             <script type="text/javascript">
                 $(document).ready(function () {
                     $('#show-question').on('click', function () {
-                        if ($('#code').val() == <?php echo $question['code'] ?>) {
+                        checkCode();
+                    });
 
-                            $('.answer-div').removeClass('hidden');
-                            $('.code-div').addClass('hidden');
-
-                        } else {
-                            alert('Please Enter Correct Code !!');
+                    $('#code').keypress(function (e) {
+                        var key = e.which;
+                        if (key == 13) {
+                            checkCode();
                         }
                     });
                 });
+
+                function checkCode() {
+                    if ($('#code').val() == <?php echo $question['code'] ?>) {
+
+                        $('.answer-div').removeClass('hidden');
+                        $('.code-div').addClass('hidden');
+
+                    } else {
+                        alert('Please Enter Correct Code !!');
+                    }
+                }
+
                 function checkAnswer() {
                     userAnswer = $('#user-answer').val();
                     correctAnswer = $('#correct-answer').val().split(",");
@@ -72,6 +84,7 @@ if (checkParam('name') && checkParam('phone-number')) {
                 <?php print_r($question) ?>
                 <div class="text-center">
                     <h2>Current question <?php echo $question['rank'] ?></h2>
+
                     <h2>Go to site <?php echo $question['destination'] ?></h2>
 
                     <h2>And Enter the Code below</h2>
