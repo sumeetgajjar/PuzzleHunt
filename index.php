@@ -25,19 +25,19 @@
 <body>
 <div class="container">
     <div class="row pt pl pr">
-        <form action="start.php" method="get" class="form-horizontal" onsubmit="return validate()">
+        <form action="start.php" method="post" class="form-horizontal" onsubmit="return validate()">
             <div class="form-group">
                 <label for="name" class="col-sm-2 control-label">Name</label>
 
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="name" placeholder="Enter your Name" autofocus required>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter your Name" autofocus required>
                 </div>
             </div>
             <div class="form-group">
                 <label for="phone-number" class="col-sm-2 control-label">Phone Number</label>
 
                 <div class="col-sm-10">
-                    <input type="text" maxlength="10" class="form-control" id="phone-number"
+                    <input type="text" maxlength="10" class="form-control" id="phone-number" name="phone-number"
                            placeholder="Enter Phone Number" required>
                 </div>
             </div>
