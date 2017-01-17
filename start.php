@@ -6,12 +6,6 @@ require_once('dal/dbutil.php');
  * Date: 18/1/17
  * Time: 1:12 AM
  */
-function checkParam($paramName)
-{
-    return isset($_POST[$paramName]) && !empty($_POST[$paramName]);
-}
-
-
 if (checkParam('name') && checkParam('phone-number')) {
 
     $name = $_POST['name'];
