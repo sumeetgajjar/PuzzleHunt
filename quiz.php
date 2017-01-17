@@ -28,6 +28,7 @@ if (checkParam('name') && checkParam('phone-number')) {
         ?>
         <html>
         <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
             <link rel="stylesheet" type="text/css"
                   href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
             <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -80,14 +81,14 @@ if (checkParam('name') && checkParam('phone-number')) {
             <div class="code-div form-group">
                 <label for="code" class="col-sm-2 control-label">Code</label>
 
-                <div class="col-sm-10">
+                <div class="col-sm-8">
                     <input type="text" class="form-control" id="code" name="code" placeholder="Enter the Code"
                            autofocus required>
                 </div>
             </div>
 
             <div class="code-div form-group text-center">
-                <div class="col-sm-offset-2 col-sm-10">
+                <div class="col-sm-offset-2 col-sm-8">
                     <input id="show-question" type="button" class="btn btn-primary" value="Show Question">
                 </div>
             </div>
@@ -103,13 +104,13 @@ if (checkParam('name') && checkParam('phone-number')) {
                 <div class="answer-div form-group hidden">
                     <label for="answer" class="col-sm-2 control-label">Answer</label>
 
-                    <div class="col-sm-10">
+                    <div class="col-sm-8">
                         <input type="text" class="form-control" id="user-answer" name="user-answer"
                                placeholder="whats your answer" required>
                     </div>
                 </div>
                 <div class="answer-div form-group text-center hidden">
-                    <div class="col-sm-offset-2 col-sm-10">
+                    <div class="col-sm-offset-2 col-sm-8">
                         <input type="submit" class="btn btn-success" value="Submit Answer">
                     </div>
                 </div>
