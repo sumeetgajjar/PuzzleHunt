@@ -1,5 +1,6 @@
 <?php
 require_once('dal/dbutil.php');
+require_once('util.php');
 /**
  * Created by PhpStorm.
  * User: sumeet

@@ -75,9 +75,12 @@ function getRandomQuestion()
     if ($result) {
 
         while ($row = mysqli_fetch_assoc($result)) {
-            $questionSet[$row['id'].""] = array(
-                'question' => $row['question']."",
-                'answer' => explode(",", $row['answer'])
+            $questionSet[$row['id'] . ""] = array(
+                'question' => $row['question'] . "",
+                'code' => $row['code'] . "",
+                'destination' => $row['destination'] . "",
+                'answer' => explode(",", $row['answer']
+                )
             );
         }
 
@@ -118,9 +121,9 @@ function getRandomQuestion()
 function storeRandomQuestion($userId, $questions)
 {
     $conn = getConnection();
-    $query = "INSERT INTO user_question_mapping (user_id, question_id, rank) VALUES";
+    $query = "INSERT INTO user_question_mapping (user_id,destination, code, question_id, rank) VALUES";
     foreach ($questions as $question) {
-        $query .= "(" . $userId . "," . $question['id'] . "," . $question['rank'] . "),";
+        $query .= "(" . $userId . "," . $question['destination'] . "," . $question['code'] . "," . $question['id'] . "," . $question['rank'] . "),";
     }
     $query = trim($query, ",");
 
@@ -136,13 +139,13 @@ function getNextQuestionForUser($userId)
 {
     $conn = getConnection();
     $query = '';
-    $query .= "select b.question,b.answer";
+    $query .= "select b.*,a.rank ";
     $query .= "from user_question_mapping a ";
-    $query .= "join questions b";
-    $query .= "on a.question_id = b.id";
-    $query .= "where a.user_id = '" . $userId . "'";
-    $query .= "and a.status = 0";
-    $query .= "order by rank";
+    $query .= "join questions b ";
+    $query .= "on a.question_id = b.id ";
+    $query .= "where a.user_id = '" . $userId . "' ";
+    $query .= "and a.status = 0 ";
+    $query .= "order by rank ";
     $query .= "limit 1";
 
     $result = mysqli_query($conn, $query);
@@ -150,11 +153,40 @@ function getNextQuestionForUser($userId)
 
         if ($row = mysqli_fetch_assoc($result)) {
             closeConnection($conn);
-            return $row;
+            $finalResult = array($row);
+            return $finalResult[0];
         }
 
     } else {
         die('Cannot get question details' . mysqli_connect_error());
     }
     return false;
+}
+
+function markQuestionCompleted($userId, $questionId)
+{
+    $conn = getConnection();
+    $query = "update user_question_mapping set status = 1, completed_time = '" . getCurrentTime() . "' where user_id = $userId and question_id = $questionId";
+
+    if (mysqli_query($conn, $query)) {
+        $user_id = mysqli_insert_id($conn);
+    } else {
+        die('Cannot mark question completed' . mysqli_connect_error());
+    }
+    closeConnection($conn);
+    return $user_id;
+}
+
+function updateCompletedTime($userId)
+{
+    $conn = getConnection();
+    $query = "update users set completed = 1, completed_time = '" . getCurrentTime() . "' where id = $userId and completed = 0";
+
+    if (mysqli_query($conn, $query)) {
+        $user_id = mysqli_insert_id($conn);
+    } else {
+        die('Cannot update completion time' . mysqli_connect_error());
+    }
+    closeConnection($conn);
+    return $user_id;
 }
