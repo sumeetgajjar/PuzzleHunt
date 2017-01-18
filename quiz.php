@@ -101,12 +101,12 @@ if (checkParam('name') && checkParam('phone-number')) {
             </div>
 
             <div class="code-div form-group text-center">
-                <div class="col-sm-offset-2 col-sm-8">
+                <div class="col-sm-offset-2 col-sm-8 mt">
                     <input id="show-question" type="button" class="btn btn-primary btn-lg" value="Show Question">
                 </div>
             </div>
 
-            <form action="#" method="post" class="form-horizontal mt" onsubmit="return checkAnswer()">
+            <form action="quiz.php" method="post" class="form-horizontal mt" onsubmit="return checkAnswer()">
                 <input type="text" name="name" value="<?php echo $name ?>" hidden>
                 <input type="text" name="phone-number" value="<?php echo $phone ?>" hidden>
                 <input id="solved" type="text" name="solved" value="" hidden>
