@@ -102,7 +102,7 @@ if (checkParam('name') && checkParam('phone-number')) {
 
             <div class="code-div form-group text-center">
                 <div class="col-sm-offset-2 col-sm-8">
-                    <input id="show-question" type="button" class="btn btn-primary" value="Show Question">
+                    <input id="show-question" type="button" class="btn btn-primary btn-lg" value="Show Question">
                 </div>
             </div>
 
@@ -124,7 +124,7 @@ if (checkParam('name') && checkParam('phone-number')) {
                 </div>
                 <div class="answer-div form-group text-center hidden">
                     <div class="col-sm-offset-2 col-sm-8">
-                        <input type="submit" class="btn btn-success" value="Submit Answer">
+                        <input type="submit" class="btn btn-success btn-lg" value="Submit Answer">
                     </div>
                 </div>
             </form>
