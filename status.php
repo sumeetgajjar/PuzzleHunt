@@ -26,7 +26,9 @@ require_once('dal/dbutil.php');
             <th>User ID</th>
             <th>Name</th>
             <th>Phone No</th>
-            <th>Completed Time</th>
+            <th>Total Time</th>
+            <th>Start Time</th>
+            <th>End Time</th>
         </tr>
         </thead>
         <tbody>
@@ -38,6 +40,8 @@ require_once('dal/dbutil.php');
                 echo '<td>' . $value['id'] . '</td>';
                 echo '<td>' . $value['name'] . '</td>';
                 echo '<td>' . $value['phone_number'] . '</td>';
+                echo '<td>' . $value['total_time'] . '</td>';
+                echo '<td>' . $value['creation_date'] . '</td>';
                 echo '<td>' . $value['hunt_completed_time'] . '</td>';
                 echo '</tr>';
             }
