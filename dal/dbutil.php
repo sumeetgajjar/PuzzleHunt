@@ -10,7 +10,6 @@ define('QUESTION_COUNT', 8);
 
 function getCurrentTime()
 {
-    date_default_timezone_set('Asia/Kolkata');
     return date("Y-m-d H:i:s");
 }
 
