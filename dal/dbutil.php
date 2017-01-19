@@ -32,7 +32,7 @@ function createNewUser($name, $phone)
     $conn = getConnection();
     $query = "INSERT INTO users (name, phone_number, creation_date) VALUES ('$name', $phone, '" . getCurrentTime() . "') returning id";
 
-    $result = pg_query($conn, pg_escape_string($query));
+    $result = pg_query($conn, $query);
     if ($result) {
         if ($row = pg_fetch_assoc($result)) {
             $user_id = $row['id'];
@@ -53,7 +53,7 @@ function getUserDetails($name, $phone)
     $query = "SELECT * from users where name = '" . $name . "' and phone_number = '" . $phone . "'";
 
     $userDetails = array();
-    $result = pg_query($conn, pg_escape_string($query));
+    $result = pg_query($conn, $query);
     if ($result) {
 
         if ($row = pg_fetch_assoc($result)) {
@@ -74,7 +74,7 @@ function getRandomQuestion()
     $query = "SELECT * from questions";
 
     $questionSet = array();
-    $result = pg_query($conn, pg_escape_string($query));
+    $result = pg_query($conn, $query);
     if ($result) {
 
         while ($row = pg_fetch_assoc($result)) {
@@ -130,7 +130,7 @@ function storeRandomQuestion($userId, $questions)
     }
     $query = trim($query, ",");
 
-    $result = pg_query($conn, pg_escape_string($query));
+    $result = pg_query($conn, $query);
     if ($result) {
 
     } else {
@@ -152,7 +152,7 @@ function getNextQuestionForUser($userId)
     $query .= "order by rank ";
     $query .= "limit 1";
 
-    $result = pg_query($conn, pg_escape_string($query));
+    $result = pg_query($conn, $query);
     if ($result) {
 
         if ($row = pg_fetch_assoc($result)) {
@@ -172,7 +172,7 @@ function markQuestionCompleted($userId, $questionId)
     $conn = getConnection();
     $query = "update user_question_mapping set status = 1, completed_time = '" . getCurrentTime() . "' where user_id = $userId and question_id = $questionId";
 
-    $result = pg_query($conn, pg_escape_string($query));
+    $result = pg_query($conn, $query);
     if ($result) {
 
     } else {
@@ -186,7 +186,7 @@ function updateCompletedTime($userId)
     $conn = getConnection();
     $query = "update users set completed = 1, hunt_completed_time = '" . getCurrentTime() . "' where id = $userId";
 
-    $result = pg_query($conn, pg_escape_string($query));
+    $result = pg_query($conn, $query);
     if ($result) {
 
     } else {
@@ -206,7 +206,7 @@ function getUserStatus()
     $query .= "order by a.id , b.rank ";
 
     $userStatus = array();
-    $result = pg_query($conn, pg_escape_string($query));
+    $result = pg_query($conn, $query);
     if ($result) {
 
         while ($row = pg_fetch_assoc($result)) {
@@ -233,7 +233,7 @@ function getWinnerStatus()
     $query .= "order by total_time ";
 
     $winnerStatus = array();
-    $result = pg_query($conn, pg_escape_string($query));
+    $result = pg_query($conn, $query);
     if ($result) {
 
         while ($row = pg_fetch_assoc($result)) {
