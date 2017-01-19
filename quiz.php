@@ -56,6 +56,7 @@ if (checkParam('name') && checkParam('phone-number')) {
 
                         $('.answer-div,.question-div').removeClass('hidden');
                         $('.code-div').addClass('hidden');
+                        $('#user-answer').focus();
 
                     } else {
                         alert('Please Enter Correct Code !!');

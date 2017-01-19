@@ -14,7 +14,7 @@ define('QUESTION_COUNT', 8);
 
 function getCurrentTime()
 {
-    return date("Y-m-d h:i:sa");
+    return date("Y-m-d H:i:s");
 }
 
 function getConnection()
@@ -180,7 +180,7 @@ function markQuestionCompleted($userId, $questionId)
 function updateCompletedTime($userId)
 {
     $conn = getConnection();
-    $query = "update users set completed = 1, completed_time = '" . getCurrentTime() . "' where id = $userId and completed = 0";
+    $query = "update users set completed = 1, hunt_completed_time = '" . getCurrentTime() . "' where id = $userId";
 
     if (mysqli_query($conn, $query)) {
         $user_id = mysqli_insert_id($conn);
@@ -189,4 +189,54 @@ function updateCompletedTime($userId)
     }
     closeConnection($conn);
     return $user_id;
+}
+
+function getUserStatus()
+{
+    $conn = getConnection();
+    $query = "";
+    $query .= "SELECT *  ";
+    $query .= "from users a ";
+    $query .= "join user_question_mapping b ";
+    $query .= "on a.id = b.user_id ";
+    $query .= "order by a.id , b.rank ";
+
+    $userStatus = array();
+    $result = mysqli_query($conn, $query);
+    if ($result) {
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            array_push($userStatus, $row);
+        }
+
+    } else {
+        die('Cannot get user Status' . mysqli_connect_error());
+    }
+    closeConnection($conn);
+    return $userStatus;
+}
+
+function getWinnerStatus()
+{
+
+    $conn = getConnection();
+    $query = "";
+    $query .= "select *  ";
+    $query .= "from users ";
+    $query .= "where completed = 1 ";
+    $query .= "order by cast(hunt_completed_time as DATETIME) desc ";
+
+    $winnerStatus = array();
+    $result = mysqli_query($conn, $query);
+    if ($result) {
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            array_push($winnerStatus, $row);
+        }
+
+    } else {
+        die('Cannot get winner Status' . mysqli_connect_error());
+    }
+    closeConnection($conn);
+    return $winnerStatus;
 }
