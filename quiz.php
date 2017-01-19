@@ -54,7 +54,7 @@ if (checkParam('name') && checkParam('phone-number')) {
                 function checkCode() {
                     if ($('#code').val() == <?php echo $question['code'] ?>) {
 
-                        $('.answer-div').removeClass('hidden');
+                        $('.answer-div,.question-div').removeClass('hidden');
                         $('.code-div').addClass('hidden');
 
                     } else {
@@ -84,14 +84,15 @@ if (checkParam('name') && checkParam('phone-number')) {
                 <?php print_r($question) ?>
                 <div class="text-center">
                     <h2>Current question <?php echo $question['rank'] ?></h2>
-
-                    <h2>Go to site <?php echo $question['destination'] ?></h2>
-
-                    <h2>And Enter the Code below</h2>
                 </div>
             </div>
 
-            <div class="code-div form-group">
+            <div class="code-div form-group text-center">
+
+                <h2>Go to site <?php echo $question['destination'] ?></h2>
+
+                <h2>And Enter the Code below</h2>
+
                 <label for="code" class="col-sm-2 control-label">Code</label>
 
                 <div class="col-sm-8">
@@ -101,6 +102,7 @@ if (checkParam('name') && checkParam('phone-number')) {
             </div>
 
             <div class="code-div form-group text-center">
+
                 <div class="col-sm-offset-2 col-sm-8 mt">
                     <input id="show-question" type="button" class="btn btn-primary btn-lg" value="Show Question">
                 </div>
@@ -114,6 +116,11 @@ if (checkParam('name') && checkParam('phone-number')) {
                 <input id="correct-answer" type="text" name="correct-answer" value="<?php echo $question['answer'] ?>"
                        hidden>
 
+                <div class="question-div text-center hidden">
+                    <h2>
+                        <?php echo $question['question'] ?>
+                    </h2>
+                </div>
                 <div class="answer-div form-group hidden">
                     <label for="answer" class="col-sm-2 control-label">Answer</label>
 
