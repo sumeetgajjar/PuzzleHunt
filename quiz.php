@@ -96,9 +96,9 @@ if (checkParam('name') && checkParam('phone-number')) {
 
             <div class="code-div form-group text-center">
 
-                <h2>Go to site <?php echo $question['destination'] ?></h2>
+                <h3>Go to Spot no :- <?php echo $question['destination'] ?></h3>
 
-                <h2>And Enter the Code below</h2>
+                <h3>And Enter the Code below</h3>
 
                 <label for="code" class="col-sm-2 control-label">Code</label>
 
