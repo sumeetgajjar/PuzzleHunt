@@ -225,10 +225,11 @@ function getWinnerStatus()
 
     $conn = getConnection();
     $query = "";
-    $query .= "select *  ";
+    $query .= "select id,name,phone_number, ";
+    $query .= "cast(hunt_completed_time as timestamp) - cast(creation_date as timestamp) as total_time ";
     $query .= "from users ";
     $query .= "where completed = 1 ";
-    $query .= "order by cast(hunt_completed_time as timestamp) desc ";
+    $query .= "order by total_time ";
 
     $winnerStatus = array();
     $result = pg_query($conn, $query);
