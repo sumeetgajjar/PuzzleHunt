@@ -6,6 +6,13 @@
  * Time: 12:57 AM
  */
 
+define('USERNAME', 'puzzle_hunt');
+define('PASSWORD', 'Puzzle_Hunt');
+define('SERVER', 'localhost');
+define('DB_NAME', 'puzzle_hunt');
+define('QUESTION_COUNT', 8);
+define('LOCAL', 1);
+
 function getCurrentTime()
 {
     return date("Y-m-d H:i:s");
@@ -13,35 +20,40 @@ function getCurrentTime()
 
 function getConnection()
 {
-    $conn = pg_connect(getenv("DATABASE_URL"));
+    if (LOCAL == 1) {
+        $conn = mysqli_connect(SERVER, USERNAME, PASSWORD, DB_NAME);
+    } else {
+        $url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+
+        $server = $url["host"];
+        $username = $url["user"];
+        $password = $url["pass"];
+        $db = substr($url["path"], 1);
+        $conn = mysqli_connect($server, $username, $password, $db);
+    }
+
+
     if (!$conn)
-        die('Cannot connect to DB ' . pg_last_error());
+        die('Cannot connect to DB ' . mysqli_connect_error());
     return $conn;
 }
 
-function closeConnection($result, $conn)
+function closeConnection($conn)
 {
-    pg_free_result($result);
-    pg_close($conn);
+    mysqli_close($conn);
 }
 
 function createNewUser($name, $phone)
 {
     $conn = getConnection();
-    $query = "INSERT INTO users (name, phone_number, creation_date) VALUES ('$name', $phone, '" . getCurrentTime() . "') returning id";
+    $query = "INSERT INTO users (name, phone_number, creation_date) VALUES ('$name', $phone, '" . getCurrentTime() . "')";
 
-    $result = pg_query($conn, $query);
-    if ($result) {
-        if ($row = pg_fetch_assoc($result)) {
-            $user_id = $row['id'];
-        } else {
-            die('Cannot create user ' . pg_last_error());
-        }
-
+    if (mysqli_query($conn, $query)) {
+        $user_id = mysqli_insert_id($conn);
     } else {
-        die('Cannot create user ' . pg_last_error());
+        die('Cannot create user ' . mysqli_connect_error());
     }
-    closeConnection($result, $conn);
+    closeConnection($conn);
     return $user_id;
 }
 
@@ -51,18 +63,18 @@ function getUserDetails($name, $phone)
     $query = "SELECT * from users where name = '" . $name . "' and phone_number = '" . $phone . "'";
 
     $userDetails = array();
-    $result = pg_query($conn, $query);
+    $result = mysqli_query($conn, $query);
     if ($result) {
 
-        if ($row = pg_fetch_assoc($result)) {
+        if ($row = mysqli_fetch_assoc($result)) {
+            closeConnection($conn);
             array_push($userDetails, $row);
             $userDetails = $userDetails[0];
         }
 
     } else {
-        die('Cannot get user details ' . pg_last_error());
+        die('Cannot get user details ' . mysqli_connect_error());
     }
-    closeConnection($result, $conn);
     return $userDetails;
 }
 
@@ -72,10 +84,10 @@ function getRandomQuestion()
     $query = "SELECT * from questions";
 
     $questionSet = array();
-    $result = pg_query($conn, $query);
+    $result = mysqli_query($conn, $query);
     if ($result) {
 
-        while ($row = pg_fetch_assoc($result)) {
+        while ($row = mysqli_fetch_assoc($result)) {
             $questionSet[$row['id'] . ""] = array(
                 'question' => $row['question'] . "",
                 'code' => $row['code'] . "",
@@ -86,9 +98,9 @@ function getRandomQuestion()
         }
 
     } else {
-        die('Cannot get question details ' . pg_last_error());
+        die('Cannot get question details ' . mysqli_connect_error());
     }
-    closeConnection($result, $conn);
+    closeConnection($conn);
 
     $min = 99999999;
     $max = 0;
@@ -128,13 +140,12 @@ function storeRandomQuestion($userId, $questions)
     }
     $query = trim($query, ",");
 
-    $result = pg_query($conn, $query);
-    if ($result) {
+    if (mysqli_query($conn, $query)) {
 
     } else {
-        die('Cannot insert random sequence ' . pg_last_error());
+        die('Cannot insert random sequence ' . mysqli_connect_error());
     }
-    closeConnection($result, $conn);
+    closeConnection($conn);
 }
 
 function getNextQuestionForUser($userId)
@@ -150,17 +161,17 @@ function getNextQuestionForUser($userId)
     $query .= "order by rank ";
     $query .= "limit 1";
 
-    $result = pg_query($conn, $query);
+    $result = mysqli_query($conn, $query);
     if ($result) {
 
-        if ($row = pg_fetch_assoc($result)) {
+        if ($row = mysqli_fetch_assoc($result)) {
+            closeConnection($conn);
             $finalResult = array($row);
-            closeConnection($result, $conn);
             return $finalResult[0];
         }
 
     } else {
-        die('Cannot get question details ' . pg_last_error());
+        die('Cannot get question details ' . mysqli_connect_error());
     }
     return false;
 }
@@ -170,13 +181,13 @@ function markQuestionCompleted($userId, $questionId)
     $conn = getConnection();
     $query = "update user_question_mapping set status = 1, completed_time = '" . getCurrentTime() . "' where user_id = $userId and question_id = $questionId";
 
-    $result = pg_query($conn, $query);
-    if ($result) {
-
+    if (mysqli_query($conn, $query)) {
+        $user_id = mysqli_insert_id($conn);
     } else {
-        die('Cannot mark question completed ' . pg_last_error());
+        die('Cannot mark question completed ' . mysqli_connect_error());
     }
-    closeConnection($result, $conn);
+    closeConnection($conn);
+    return $user_id;
 }
 
 function updateCompletedTime($userId)
@@ -184,13 +195,13 @@ function updateCompletedTime($userId)
     $conn = getConnection();
     $query = "update users set completed = 1, hunt_completed_time = '" . getCurrentTime() . "' where id = $userId";
 
-    $result = pg_query($conn, $query);
-    if ($result) {
-
+    if (mysqli_query($conn, $query)) {
+        $user_id = mysqli_insert_id($conn);
     } else {
-        die('Cannot update completion time ' . pg_last_error());
+        die('Cannot update completion time ' . mysqli_connect_error());
     }
-    closeConnection($result, $conn);
+    closeConnection($conn);
+    return $user_id;
 }
 
 function getUserStatus()
@@ -204,17 +215,17 @@ function getUserStatus()
     $query .= "order by a.id , b.rank ";
 
     $userStatus = array();
-    $result = pg_query($conn, $query);
+    $result = mysqli_query($conn, $query);
     if ($result) {
 
-        while ($row = pg_fetch_assoc($result)) {
+        while ($row = mysqli_fetch_assoc($result)) {
             array_push($userStatus, $row);
         }
 
     } else {
-        die('Cannot get user Status ' . pg_last_error());
+        die('Cannot get user Status ' . mysqli_connect_error());
     }
-    closeConnection($result, $conn);
+    closeConnection($conn);
     return $userStatus;
 }
 
@@ -226,19 +237,19 @@ function getWinnerStatus()
     $query .= "select *  ";
     $query .= "from users ";
     $query .= "where completed = 1 ";
-    $query .= "order by cast(hunt_completed_time as timestamp) desc ";
+    $query .= "order by cast(hunt_completed_time as DATETIME) desc ";
 
     $winnerStatus = array();
-    $result = pg_query($conn, $query);
+    $result = mysqli_query($conn, $query);
     if ($result) {
 
-        while ($row = pg_fetch_assoc($result)) {
+        while ($row = mysqli_fetch_assoc($result)) {
             array_push($winnerStatus, $row);
         }
 
     } else {
-        die('Cannot get winner Status ' . pg_last_error());
+        die('Cannot get winner Status ' . mysqli_connect_error());
     }
-    closeConnection($result, $conn);
+    closeConnection($conn);
     return $winnerStatus;
 }
