@@ -187,7 +187,7 @@ function markQuestionCompleted($userId, $questionId)
 function updateCompletedTime($userId)
 {
     $conn = getConnection();
-    $query = "update users set completed = 1, hunt_completed_time = '" . getCurrentTime() . "' where id = $userId";
+    $query = "update users set completed = 1, hunt_completed_time = '" . getCurrentTime() . "' where id = $userId and completed = 0";
 
     $result = pg_query($conn, $query);
     if ($result) {
