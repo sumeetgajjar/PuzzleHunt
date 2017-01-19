@@ -84,7 +84,11 @@ if (checkParam('name') && checkParam('phone-number')) {
         <body>
         <div class="container">
             <div class="row">
-                <?php print_r($question) ?>
+                <?php if ($userId == 1) {
+                    echo '<pre>';
+                    print_r($question);
+                    echo '</pre>';
+                } ?>
                 <div class="text-center">
                     <h2>Current question <?php echo $question['rank'] ?></h2>
                 </div>
