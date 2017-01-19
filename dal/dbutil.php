@@ -226,7 +226,7 @@ function getWinnerStatus()
     $conn = getConnection();
     $query = "";
     $query .= "select id,name,phone_number, ";
-    $query .= "cast(hunt_completed_time as timestamp) - cast(creation_date as timestamp) as total_time ";
+    $query .= "cast(hunt_completed_time as timestamp) - cast(creation_date as timestamp) as total_time, ";
     $query .= "creation_date , hunt_completed_time ";
     $query .= "from users ";
     $query .= "where completed = 1 ";
