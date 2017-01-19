@@ -29,6 +29,8 @@ if (checkParam('name') && checkParam('phone-number')) {
     <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#9500ca"/>
+        <link rel="icon" type="image/png" href="css/favicon.png">
         <link rel="stylesheet" type="text/css"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="css/style.css">

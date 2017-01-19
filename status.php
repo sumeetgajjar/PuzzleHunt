@@ -10,6 +10,8 @@ require_once('dal/dbutil.php');
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#9500ca"/>
+    <link rel="icon" type="image/png" href="css/favicon.png">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
