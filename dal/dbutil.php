@@ -5,7 +5,7 @@
  * Date: 18/1/17
  * Time: 12:57 AM
  */
-define('QUESTION_COUNT', 8);
+define('QUESTION_COUNT', 10);
 
 
 function getCurrentTime()
@@ -92,29 +92,43 @@ function getRandomQuestion()
     }
     closeConnection($result, $conn);
 
-    $min = 99999999;
-    $max = 0;
+    $minId = 99999999;
+    $maxId = 0;
+    $minDest = 9999999;
+    $maxDest = 0;
     foreach ($questionSet as $id => $question) {
-        if ($id <= $min) {
-            $min = $id;
+        if ($id <= $minId) {
+            $minId = $id;
         }
-        if ($id >= $max) {
-            $max = $id;
+        if ($id >= $maxId) {
+            $maxId = $id;
+        }
+
+        $dest = $question['destination'];
+        if ($dest <= $minDest) {
+            $minDest = $dest;
+        }
+        if ($dest >= $maxDest) {
+            $maxDest = $dest;
         }
     }
 
-    $randSeq = array();
+    $randIdSeq = array();
+    $randDestSeq = array();
     $randQuestion = array();
 
     $i = 0;
     while ($i < QUESTION_COUNT) {
-        $r = rand($min, $max);
-        if (!in_array($r, $randSeq)) {
+        $randomId = rand($minId, $maxId);
+        $randomDest = rand($minDest, $maxDest);
+
+        if (!in_array($randomId, $randIdSeq) && !in_array($randomDest, $randDestSeq)) {
             $i++;
-            $questionSet[$r]['rank'] = $i;
-            $questionSet[$r]['id'] = $r;
-            array_push($randSeq, $r);
-            array_push($randQuestion, $questionSet[$r]);
+            $questionSet[$randomId]['rank'] = $i;
+            $questionSet[$randomId]['id'] = $randomId;
+            array_push($randIdSeq, $randomId);
+            array_push($randDestSeq, $randomDest);
+            array_push($randQuestion, $questionSet[$randomId]);
         }
     }
 
