@@ -94,22 +94,12 @@ function getRandomQuestion()
 
     $minId = 99999999;
     $maxId = 0;
-    $minDest = 9999999;
-    $maxDest = 0;
     foreach ($questionSet as $id => $question) {
         if ($id <= $minId) {
             $minId = $id;
         }
         if ($id >= $maxId) {
             $maxId = $id;
-        }
-
-        $dest = $question['destination'];
-        if ($dest <= $minDest) {
-            $minDest = $dest;
-        }
-        if ($dest >= $maxDest) {
-            $maxDest = $dest;
         }
     }
 
@@ -120,14 +110,13 @@ function getRandomQuestion()
     $i = 0;
     while ($i < QUESTION_COUNT) {
         $randomId = rand($minId, $maxId);
-        $randomDest = rand($minDest, $maxDest);
 
-        if (!in_array($randomId, $randIdSeq) && !in_array($randomDest, $randDestSeq)) {
+        if (!in_array($randomId, $randIdSeq) && !in_array($questionSet[$randomId]['destination'], $randDestSeq)) {
             $i++;
             $questionSet[$randomId]['rank'] = $i;
             $questionSet[$randomId]['id'] = $randomId;
             array_push($randIdSeq, $randomId);
-            array_push($randDestSeq, $randomDest);
+            array_push($randDestSeq, $questionSet[$randomId]['destination']);
             array_push($randQuestion, $questionSet[$randomId]);
         }
     }
