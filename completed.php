@@ -16,7 +16,7 @@
 </head>
 <body>
 <div class="container">
-    <div class="row pt pl pr">
+    <div class="row pt pl pr text-center">
         <h1>Congratulations you have completed the Hunt !!!!</h1>
     </div>
 </div>
