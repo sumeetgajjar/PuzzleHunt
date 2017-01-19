@@ -5,6 +5,8 @@
  * Date: 18/1/17
  * Time: 12:57 AM
  */
+define('QUESTION_COUNT', 8);
+
 
 function getCurrentTime()
 {
