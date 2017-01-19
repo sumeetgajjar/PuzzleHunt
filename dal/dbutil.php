@@ -11,6 +11,7 @@ define('PASSWORD', 'Puzzle_Hunt');
 define('SERVER', 'localhost');
 define('DB_NAME', 'puzzle_hunt');
 define('QUESTION_COUNT', 8);
+define('LOCAL', 1);
 
 function getCurrentTime()
 {
@@ -19,9 +20,21 @@ function getCurrentTime()
 
 function getConnection()
 {
-    $conn = mysqli_connect(SERVER, USERNAME, PASSWORD, DB_NAME);
+    if (LOCAL == 1) {
+        $conn = mysqli_connect(SERVER, USERNAME, PASSWORD, DB_NAME);
+    } else {
+        $url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+
+        $server = $url["host"];
+        $username = $url["user"];
+        $password = $url["pass"];
+        $db = substr($url["path"], 1);
+        $conn = mysqli_connect($server, $username, $password, $db);
+    }
+
+
     if (!$conn)
-        die('Cannot connect to DB' . mysqli_connect_error());
+        die('Cannot connect to DB ' . mysqli_connect_error());
     return $conn;
 }
 
@@ -38,7 +51,7 @@ function createNewUser($name, $phone)
     if (mysqli_query($conn, $query)) {
         $user_id = mysqli_insert_id($conn);
     } else {
-        die('Cannot create user' . mysqli_connect_error());
+        die('Cannot create user ' . mysqli_connect_error());
     }
     closeConnection($conn);
     return $user_id;
@@ -60,7 +73,7 @@ function getUserDetails($name, $phone)
         }
 
     } else {
-        die('Cannot get user details' . mysqli_connect_error());
+        die('Cannot get user details ' . mysqli_connect_error());
     }
     return $userDetails;
 }
@@ -85,7 +98,7 @@ function getRandomQuestion()
         }
 
     } else {
-        die('Cannot get question details' . mysqli_connect_error());
+        die('Cannot get question details ' . mysqli_connect_error());
     }
     closeConnection($conn);
 
@@ -130,7 +143,7 @@ function storeRandomQuestion($userId, $questions)
     if (mysqli_query($conn, $query)) {
 
     } else {
-        die('Cannot insert random sequence' . mysqli_connect_error());
+        die('Cannot insert random sequence ' . mysqli_connect_error());
     }
     closeConnection($conn);
 }
@@ -158,7 +171,7 @@ function getNextQuestionForUser($userId)
         }
 
     } else {
-        die('Cannot get question details' . mysqli_connect_error());
+        die('Cannot get question details ' . mysqli_connect_error());
     }
     return false;
 }
@@ -171,7 +184,7 @@ function markQuestionCompleted($userId, $questionId)
     if (mysqli_query($conn, $query)) {
         $user_id = mysqli_insert_id($conn);
     } else {
-        die('Cannot mark question completed' . mysqli_connect_error());
+        die('Cannot mark question completed ' . mysqli_connect_error());
     }
     closeConnection($conn);
     return $user_id;
@@ -185,7 +198,7 @@ function updateCompletedTime($userId)
     if (mysqli_query($conn, $query)) {
         $user_id = mysqli_insert_id($conn);
     } else {
-        die('Cannot update completion time' . mysqli_connect_error());
+        die('Cannot update completion time ' . mysqli_connect_error());
     }
     closeConnection($conn);
     return $user_id;
@@ -210,7 +223,7 @@ function getUserStatus()
         }
 
     } else {
-        die('Cannot get user Status' . mysqli_connect_error());
+        die('Cannot get user Status ' . mysqli_connect_error());
     }
     closeConnection($conn);
     return $userStatus;
@@ -235,7 +248,7 @@ function getWinnerStatus()
         }
 
     } else {
-        die('Cannot get winner Status' . mysqli_connect_error());
+        die('Cannot get winner Status ' . mysqli_connect_error());
     }
     closeConnection($conn);
     return $winnerStatus;
