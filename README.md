@@ -1,2 +1,2 @@
-# PuzzleHunt
-Web Interface for playing treasure hunt 
+# Riddler
+Web Interface for playing Scavanger hunt 
